@@ -85,23 +85,6 @@
   }
 }
 
-/* Grade explorer: kernels glide to their place and pop in on first paint. */
-.plate-kernel {
-  transition:
-    transform 0.7s var(--ease-spring),
-    opacity 0.4s;
-}
-.plate-kernel use {
-  animation: land 0.6s cubic-bezier(0.3, 1.4, 0.5, 1) backwards;
-  transform-box: fill-box;
-  transform-origin: center;
-}
-@keyframes land {
-  from {
-    transform: scale(0) rotate(-90deg);
-  }
-}
-
 @layer utilities {
   .wrap {
     max-width: var(--container-wrap);

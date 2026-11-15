@@ -1,32 +1,17 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { grades, kernelScale, kernelsPerHandful } from "@/data/grades";
+import Image from "next/image";
+import { grades, kernelsPerHandful } from "@/data/grades";
 import { products } from "@/data/products";
 import { rupees } from "@/lib/pricing";
-import { GOLDEN_ANGLE } from "@/components/art/pile";
 import { AddToCartButton } from "@/components/product/AddToCartButton";
-
-const MAX_KERNELS = kernelsPerHandful(Math.max(...grades.map((g) => g.count)));
-const R = 150;
-const CENTRE = 210;
-
-function kernelStyle(j: number, n: number, scale: number): React.CSSProperties {
-  if (j >= n) return { transform: `translate(${CENTRE}px,${CENTRE}px) rotate(0deg) scale(0)`, opacity: 0 };
-  const r = R * Math.sqrt((j + 0.5) / n);
-  const a = j * GOLDEN_ANGLE;
-  return {
-    transform: `translate(${(CENTRE + r * Math.cos(a)).toFixed(1)}px,${(CENTRE + r * Math.sin(a)).toFixed(1)}px) rotate(${(j * 73) % 360}deg) scale(${scale.toFixed(3)})`,
-    opacity: 1,
-  };
-}
 
 export function GradeExplorer() {
   const [index, setIndex] = useState(2); // W240, the bestseller
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const grade = grades[index];
   const n = kernelsPerHandful(grade.count);
-  const scale = 1.02 * kernelScale(grade.count);
   const product = products.find((p) => p.subcategory === grade.code && p.category === "whole")!;
 
   const move = (to: number) => {
@@ -37,20 +22,24 @@ export function GradeExplorer() {
 
   return (
     <div className="rounded-panel border border-leaf-line bg-leaf-deep p-[clamp(16px,2.4vw,28px)]">
-      <div className="relative mx-auto max-w-[440px]">
-        <svg viewBox="0 0 420 420" role="img" aria-labelledby="plate-label" className="h-auto w-full">
-          <title id="plate-label">{`A 28 gram handful of cashews at grade ${grade.code}`}</title>
-          <circle cx="210" cy="214" r="200" fill="#051A14" opacity=".55" />
-          <circle cx="210" cy="210" r="200" fill="url(#g-bowl)" />
-          <circle cx="210" cy="210" r="186" fill="none" stroke="#E9B23C" strokeOpacity=".5" strokeWidth="1.5" />
-          <g>
-            {Array.from({ length: MAX_KERNELS }, (_, j) => (
-              <g key={j} className="plate-kernel" style={kernelStyle(j, n, scale)}>
-                <use href="#kern" style={{ animationDelay: `${j * 35}ms` }} />
-              </g>
-            ))}
-          </g>
-        </svg>
+      <div className="relative mx-auto aspect-square w-full max-w-[440px]">
+        <div className="absolute inset-0 rounded-full bg-[#051a14]/55 translate-y-1" aria-hidden="true" />
+        <div className="absolute inset-0 overflow-hidden rounded-full border border-swarna/50 bg-leaf-deep">
+          {grades.map((g, i) => (
+            <Image
+              key={g.code}
+              src={`/grades/${g.code.toLowerCase()}.webp`}
+              alt={i === index ? `A bowl of ${g.code} whole cashews` : ""}
+              aria-hidden={i === index ? undefined : true}
+              fill
+              sizes="(max-width: 820px) 90vw, 440px"
+              priority={i === 2}
+              className={`origin-[50%_12%] scale-[1.3] object-cover transition-[opacity,transform] duration-500 ease-out ${
+                i === index ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          ))}
+        </div>
       </div>
 
       <div
