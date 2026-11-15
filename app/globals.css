@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+/* Design tokens. One deep cashew-leaf green world; ivory cards; gold for actions
+   and one band; red only for badges. */
+@theme {
+  --color-leaf: #0f3d30;
+  --color-leaf-deep: #092a21;
+  --color-leaf-line: #24594a;
+  --color-swarna: #e9b23c;
+  --color-swarna-hover: #f3c25a;
+  --color-swarna-deep: #c48e1f;
+  --color-swarna-ink: #7a5710;
+  --color-kernel: #f6e9c9;
+  --color-kernel-shade: #e6d2a4;
+  --color-kernel-pale: #fff8e6;
+  --color-apple: #c23e25;
+  --color-ink: #10261f;
+  --color-on-leaf-soft: #bcd0c3;
+  --color-on-kernel-soft: #4a5a4f;
+  --color-whatsapp: #12713f;
+  --color-whatsapp-deep: #0e5c33;
+  --color-shade: rgb(5 22 17 / 0.6);
+
+  --font-display: var(--font-rozha), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-anek), "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  --spacing-gutter: clamp(16px, 4vw, 40px);
+  --container-wrap: 1240px;
+
+  --radius-pill: 999px;
+  --radius-card: 24px;
+  --radius-panel: 28px;
+
+  --ease-spring: cubic-bezier(0.3, 1.3, 0.5, 1);
+  --ease-drawer: cubic-bezier(0.3, 0.9, 0.3, 1);
+
+  --animate-bump: bump 0.35s ease;
+  @keyframes bump {
+    50% {
+      transform: scale(1.35);
+      background: var(--color-apple);
+    }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+  }
+  body {
+    background: var(--color-leaf);
+    color: var(--color-kernel);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+  button,
+  input,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+  button {
+    cursor: pointer;
+  }
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-swarna);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+/* Grade explorer: kernels glide to their place and pop in on first paint. */
+.plate-kernel {
+  transition:
+    transform 0.7s var(--ease-spring),
+    opacity 0.4s;
+}
+.plate-kernel use {
+  animation: land 0.6s cubic-bezier(0.3, 1.4, 0.5, 1) backwards;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes land {
+  from {
+    transform: scale(0) rotate(-90deg);
+  }
+}
+
+@layer utilities {
+  .wrap {
+    max-width: var(--container-wrap);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
