@@ -11,7 +11,7 @@ export const siteConfig = {
 
   // TODO: production URL, e.g. "https://www.example.com" (no trailing slash).
   // Used for the sitemap, canonical links and Open Graph URLs.
-  siteUrl: "",
+  siteUrl: "https://swarna-kernel.pages.dev",
 
   // TODO: WhatsApp number with country code, digits only, no plus sign (e.g. "919812345678").
   // While empty, order and enquiry buttons show a disabled state.
